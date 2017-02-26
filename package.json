@@ -1,0 +1,43 @@
+{
+  "name": "AdminJS",
+  "version": "0.1.0",
+  "description": "Test",
+  "main": "index.js",
+  "homepage": "/adminjs",
+  "repository": {},
+  "author": "bugra9",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.9.0",
+    "react-scripts": "0.8.5"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "js-yaml": "^3.8.1",
+    "localforage": "^1.5.0",
+    "moment": "^2.17.1",
+    "react": "^15.4.2",
+    "react-ace": "^4.1.6",
+    "react-datetime": "^2.8.6",
+    "react-dom": "^15.4.2",
+    "react-redux": "^5.0.2",
+    "react-router": "^3.0.2",
+    "react-router-redux": "^4.0.8",
+    "react-simplemde-editor": "^3.6.10",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.2.0",
+    "semantic-ui-css": "^2.2.4",
+    "semantic-ui-react": "^0.64.8",
+    "simplemde": "^1.11.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
