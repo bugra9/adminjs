@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { Form, Checkbox } from 'semantic-ui-react';
 import SimpleMDE from 'react-simplemde-editor';
 //import './simplemde.min.css';
@@ -12,6 +13,8 @@ import 'brace/mode/html';
 import 'brace/mode/json';
 import 'brace/mode/yaml';
 import 'brace/theme/monokai';
+
+import { updateEditor } from '../../actions/save';
 
 class JEditor extends Component {
   constructor(props) {
@@ -41,7 +44,7 @@ class JEditor extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.value !== this.props.value || nextState.checked !== this.state.checked;
+    return nextProps.isLoading !== this.props.isLoading || nextState.checked !== this.state.checked;
   }
   /*componentWillMount() {
     console.log("Editor - componentWillMount");
@@ -49,16 +52,17 @@ class JEditor extends Component {
   }*/
 
   render() {
-    if(this.props.value === "")
+    if(this.props.isLoading)
       return (<div>Yükleniyor...</div>);
 
     let editor;
     if(this.state.checked)
-      editor = <SimpleMDE value={this.props.value} />;
+      editor = <SimpleMDE onChange={(value) => this.props.updateEditor(value)} value={this.props.editor} />;
     else
       editor = (<AceEditor
-        value={this.props.value}
+        defaultValue={this.props.editor}
         mode={this.state.type}
+        onChange={(value) => this.props.updateEditor(value)}
         theme="monokai"
         width="100%"
         wrapEnabled={true}
@@ -79,7 +83,20 @@ class JEditor extends Component {
 
 JEditor.propTypes = {
   input: PropTypes.object.isRequired,
-  value: PropTypes.string.isRequired
+  value: PropTypes.string.isRequired,
+  editor: PropTypes.string,
+  updateEditor: PropTypes.func.isRequired
 };
 
-export default JEditor;
+const mapStateToProps = (state) => ({
+  editor: state.save.editor,
+  isLoading: state.save.isLoading
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateEditor: (v) => dispatch(updateEditor(v))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(JEditor);

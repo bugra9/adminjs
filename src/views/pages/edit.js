@@ -6,6 +6,7 @@ import { Menu, Icon, Grid, Segment, Header, Label, Form } from 'semantic-ui-reac
 import JInput from '../inputs';
 
 import { setList } from '../../actions/documents';
+import { save } from '../../actions/save';
 
 class EditDocuments extends Component {
   constructor(props) {
@@ -13,16 +14,22 @@ class EditDocuments extends Component {
     this.state = {tabIndex: 1};
   }
 
-  componentWillReceiveProps(nextProps) {
+  /*componentWillReceiveProps(nextProps) {
     if(Object.keys(nextProps.options).length === 0) {
       let path = nextProps.location.pathname.substr(nextProps.location.pathname.indexOf('/', 1) + 1);
       this.props.setList(path);
     }
-  }
+  }*/
 
   handleSubmit = (e, { formData }) => {
     e.preventDefault();
-    console.log("Form Submit", formData);
+    delete formData[''];
+    for(let i in formData) {
+      if(this.props.options[i] && this.props.options[i].input.type === "number")
+        formData[i] = parseInt(formData[i]);
+    }
+    this.props.save(this.props.routeParams.splat, formData);
+    hashHistory.goBack();
   }
 
   getDataAttr(v) {
@@ -189,7 +196,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setList: (v) => dispatch(setList(v))
+        setList: (v) => dispatch(setList(v)),
+        save: (path, data) => dispatch(save(path, data))
     };
 };
 

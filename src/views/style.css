@@ -35,3 +35,6 @@
 Button.item {
   border: none;
 }
+.collapsing > i {
+  cursor: pointer;
+}

@@ -1,6 +1,6 @@
 export function tree(state = {
   token: "",
-  islogin: false,
+  isLogin: false,
   isLoading: false,
   hasErrored: false,
   error: "",
@@ -14,7 +14,9 @@ export function tree(state = {
   treeLength: 0,
   treeRealLength: 0,
   counter: 1,
+  updated: true,
   tree: {},
+  raw_tree: [],
   options: {},
   nextPath: "/"
 }, action) {
@@ -44,28 +46,34 @@ export function tree(state = {
         hasErrored: false,
         isLoading: true,
         progressMessage: "Bağlanılıyor...",
-        progressPercent: 0
+        progressPercent: 0,
+        isLogin: false,
+        counter: 1,
+        treeRealLength: 0,
+        treeLength: 0
       });
     case 'BUILD_TREE_SUCCESS':
       return Object.assign({}, state, {
         tree: action.tree
       });
+    case 'LOGIN_SUCCESS':
+      return Object.assign({}, state, {
+        isLogin: true,
+        updated: false
+      });
     case 'FETCH_BLOB_SUCCESS':
-      var isLogin = {};
-      if(state.treeRealLength === state.counter) {
-        isLogin.isLogin = true;
-        sessionStorage.setItem('login', "1");
-      }
       return Object.assign({}, state, {
         //isLoading: ((state.treeRealLength === state.counter) ? false : true),
         counter: (state.counter + 1),
         progressPercent: (1 + Math.floor(state.counter*100/state.treeRealLength)),
-        progressMessage: action.message
-      }, isLogin);
+        progressMessage: action.message,
+        isLogin: (state.treeRealLength === state.counter?true:false)
+      });
     case 'FETCH_TREE_SUCCESS':
       return Object.assign({}, state, {
         treeSha: action.sha,
-        treeLength: action.length
+        treeLength: action.length,
+        raw_tree: action.tree.slice(0)
       });
     case 'FETCH_COMMIT_SUCCESS':
       return Object.assign({}, state, {

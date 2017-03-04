@@ -50,9 +50,18 @@ export function documents(state = {
         content: false,
         document: action.document
       });
+    case 'ASSIGN_DOCUMENT_SUCCESS':
+      return Object.assign({}, state, {
+        document: Object.assign(state.document, action.document)
+      });
     case 'SET_CONTENT_SUCCESS':
       return Object.assign({}, state, {
         content: true
+      });
+    case 'ADD_DOCUMENT_SUCCESS':
+      return Object.assign({}, state, {
+        collections: Object.assign(state.collections, action.document),
+        document: action.document
       });
 
     default:

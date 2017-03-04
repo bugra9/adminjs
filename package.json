@@ -16,6 +16,7 @@
     "react-scripts": "0.8.5"
   },
   "dependencies": {
+    "deep-assign": "^2.0.0",
     "isomorphic-fetch": "^2.2.1",
     "js-yaml": "^3.8.1",
     "localforage": "^1.5.0",
@@ -29,6 +30,7 @@
     "react-router-redux": "^4.0.8",
     "react-simplemde-editor": "^3.6.10",
     "redux": "^3.6.0",
+    "redux-logger": "^2.8.1",
     "redux-thunk": "^2.2.0",
     "semantic-ui-css": "^2.2.4",
     "semantic-ui-react": "^0.64.8",

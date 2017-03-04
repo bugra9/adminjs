@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Sidebar, Menu, Image, Icon } from 'semantic-ui-react';
 
+import Commit from '../compenents/commit';
+
 class LeftSidebar extends Component {
   render() {
     let visible = this.props.visible;
@@ -37,10 +39,7 @@ class LeftSidebar extends Component {
             <Icon name="setting" />
             Ayarlar
           </Menu.Item>
-          <Menu.Item as={Link} to="/commit" name="commit">
-            <Icon name="upload" />
-            Eşitle
-          </Menu.Item>
+          <Commit />
         </Sidebar>
     );
   }

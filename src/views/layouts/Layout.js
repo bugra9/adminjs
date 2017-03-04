@@ -43,13 +43,11 @@ Layout.propTypes = {
   setList: PropTypes.func.isRequired,
   params: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  token: PropTypes.string.isRequired,
-  all: PropTypes.object.isRequired,
+  token: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  token: state.tree.token,
-  all: state.documents
+  token: state.tree.token
 });
 
 const mapDispatchToProps = (dispatch) => {

@@ -5,8 +5,11 @@ import { Form } from 'semantic-ui-react';
 class JTextForm extends Component {
   render() {
     const {input, value} = this.props;
+    let type = this.props.type;
+    if(!type)
+      type = "text";
     return (
-      <Form.Input label={input.title} type="text" defaultValue={value} name={input.attr} />
+      <Form.Input label={input.title} type={type} defaultValue={value} name={input.attr} />
     );
   }
 }

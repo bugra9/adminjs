@@ -8,8 +8,11 @@ class JSelectForm extends Component {
     let {value} = this.props;
 
     let multiple = false;
-    if(input.input.multiple)
+    if(input.input.multiple) {
       multiple = true;
+      if(!Array.isArray(value))
+        value = [];
+    }
 
     let options = [];
     if(!input.input.isRelated) {

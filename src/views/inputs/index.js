@@ -26,6 +26,15 @@ class JInput extends Component {
           return (
             <JTextTable input={input} value={String(value)} />
           );
+      case "number":
+        if(type === "Input")
+          return (
+            <JTextForm type="number" input={input} value={value} />
+          );
+        else
+          return (
+            <JTextTable input={input} value={String(value)} />
+          );
       case "editor":
         if(type === "Input")
           return (

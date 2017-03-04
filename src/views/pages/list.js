@@ -6,6 +6,7 @@ import { Menu, Icon, Breadcrumb, Container, Button, Grid, Table, Segment, Card }
 import JInput from '../inputs';
 
 import { sidebarToggle } from '../../actions/system';
+import { toggle, remove } from '../../actions/save';
 
 
 class ListDocuments extends Component {
@@ -53,8 +54,8 @@ class ListDocuments extends Component {
           { cell }
           <Table.Cell collapsing>
             <Link to={link}><Icon name="edit" /></Link>
-            <Icon name="circle" color={color} />
-            <Icon name="remove" color="red" />
+            <Icon onClick={() => {this.props.toggle(value.file.path); this.forceUpdate();}} name="circle" color={color} />
+            <Icon onClick={() => {this.props.remove(value.file.path); this.forceUpdate();}} name="remove" color="red" />
           </Table.Cell>
         </Table.Row>
       );
@@ -107,6 +108,18 @@ class ListDocuments extends Component {
     }
     sections[sections.length-1].active = true;
 
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth()+1; //January is 0!
+    let yyyy = today.getFullYear();
+
+    if(dd<10) dd='0'+dd;
+    if(mm<10) mm='0'+mm;
+
+    let newDocLink = sections[sections.length-1].to.replace('list/', 'edit/');
+    newDocLink += '/'+yyyy+'-'+mm+'-'+dd+'-yeniBelge.md';
+
+
     return (
       <div>
         <Menu style={{"borderRadius": 0}} color="blue" inverted>
@@ -131,7 +144,7 @@ class ListDocuments extends Component {
                 <Icon name="folder" />
                 Yeni Klasör
               </Button>
-              <Button compact basic>
+              <Button as={Link} to={newDocLink} compact basic>
                 <Icon name="file" />
                 Yeni Belge
               </Button>
@@ -175,7 +188,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        sidebarToggle: () => dispatch(sidebarToggle())
+        sidebarToggle: () => dispatch(sidebarToggle()),
+        toggle: (v) => dispatch(toggle(v)),
+        remove: (v) => dispatch(remove(v))
     };
 };
 

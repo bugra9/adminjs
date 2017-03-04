@@ -4,21 +4,28 @@ export function setList(path) {
   console.log("Liste oluşturuluyor...");
   return (dispatch, getState) => {
     dispatch({ type: 'SET_DATA_REQUEST' });
-    let document = {};
+    let document = {
+      file: { path: path, isText: true, content: "" },
+      content: {}
+    };
     let tree = getState().tree.tree;
     let temp = path.split('/');
     for(let i in temp)
       if(temp.hasOwnProperty(i)) {
+        if(!tree[temp[i]])
+          break;
         if(!tree[temp[i]].file)
           tree = tree[temp[i]];
         else
           document = tree[temp[i]];
       }
-    if(document.file && !document.file.content) {
+    dispatch({ type: 'UPDATE_EDITOR_REQUEST' });
+    if(document.file && document.file.content === undefined) {
       localforage.getItem(document.file.sha+':c')
         .then(value => {
           document.file.content = value;
           dispatch({ type: 'SET_CONTENT_SUCCESS' });
+          dispatch({ type: 'UPDATE_EDITOR_SUCCESS', editor: document.file.content });
         })
         .catch(function(err) {
           console.log("error", err);
@@ -26,6 +33,9 @@ export function setList(path) {
     }
     dispatch({ type: 'SET_DATA_SUCCESS', tree });
     dispatch({ type: 'SET_DOCUMENT_SUCCESS', document });
+    if(document.file && document.file.content !== undefined) {
+      dispatch({ type: 'UPDATE_EDITOR_SUCCESS', editor: document.file.content });
+    }
 
     let { documents, files, directories} = extract(tree);
     dispatch({ type: 'SET_DOCUMENTS_SUCCESS', documents });
@@ -36,7 +46,46 @@ export function setList(path) {
     let variables = getAttrList(documents, options);
     dispatch({ type: 'SET_VARIABLES_SUCCESS', variables });
     for(let value of variables)
-      if(!options[value])
+      if(!options[value]) {
+        let varType = "";
+        for(let value2 of documents) {
+          if(Array.isArray(value2.content[value])) {
+            if(!varType)
+              varType = "Array";
+            else if(varType !== "Array")
+              varType = "Custom";
+          }
+          else if(typeof value2.content[value] === 'object') {
+            if(!varType)
+              varType = "Object";
+            else if(varType !== "Object")
+              varType = "Custom";
+          }
+          else if(Number.isInteger(value2.content[value])) {
+            if(!varType)
+              varType = "Number";
+            else if(varType !== "Number")
+              varType = "Custom";
+          }
+        }
+        if(varType === "Custom" && document.content) {
+          if(Array.isArray(document.content[value]))
+            varType = "Array";
+          else if(typeof document.content[value] === 'object')
+            varType = "Object";
+          else
+            varType = "String";
+        }
+        else if(varType === "Custom")
+          varType = "String";
+
+        if(varType === "Array")
+          varType = "select";
+        else if(varType === "Number")
+          varType = "number";
+        else
+          varType = "text";
+
         options[value] = {
           attr: value,
           title: value,
@@ -45,9 +94,10 @@ export function setList(path) {
           },
           edit: {},
           input: {
-            type: "text"
+            type: varType
           }
         };
+      }
     dispatch({ type: 'SET_OPTIONS_SUCCESS', options });
   };
 }
