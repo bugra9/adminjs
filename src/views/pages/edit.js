@@ -170,7 +170,7 @@ class EditDocuments extends Component {
           </Grid>
         </Segment>
         <Segment attached="bottom" className={(this.state.tabIndex === 2) ? "": "hide"}>
-            {pos3}
+            {(this.state.tabIndex === 2) ?pos3:""}
         </Segment>
       </Form>
     );

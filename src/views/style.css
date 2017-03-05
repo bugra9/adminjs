@@ -5,8 +5,8 @@
   -o-transition: all 0.5s ease-in;
   transition: all 0.5s ease-in;
 }
-.pushable {
-  min-height: 100vh;
+.pushable, .pusher {
+  min-height: 100vh !important;
 }
 .hide {
   display: none;
@@ -21,6 +21,10 @@
 
 .mb5 {
   margin-bottom: 5px;
+}
+
+.ui.header > .ui.image {
+  width: auto;
 }
 
 .ui.cards > .ui.card > .content > .header {
