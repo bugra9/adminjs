@@ -2,7 +2,8 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
 import Layout from './views/layouts/Layout';
-import NotFound from './views/pages/NotFound';
+import NotFound from './views/pages/notFound';
+import Dashboard from './views/pages/dashboard';
 import ListDocuments from './views/pages/list';
 import EditDocuments from './views/pages/edit';
 import Login from './views/pages/login';
@@ -21,7 +22,7 @@ const routes = (
   <Route>
     <Route path="/login" component={Login} />
     <Route path="/" component={Layout}>
-      <IndexRoute component={NotFound} onEnter={userIsLogin} />
+      <IndexRoute component={Dashboard} onEnter={userIsLogin} />
       <Route path="edit/*" component={EditDocuments} onEnter={userIsLogin} />
       <Route path="list/*" component={ListDocuments} onEnter={userIsLogin} />
     </Route>
