@@ -7,6 +7,7 @@ import JDateTimeTable from './JDateTimeTable';
 import JSelectForm from './JSelectForm';
 import JSelectTable from './JSelectTable';
 import JEditor from './JEditor';
+import JFileForm from './JFileForm';
 
 class JInput extends Component {
 
@@ -39,6 +40,15 @@ class JInput extends Component {
         if(type === "Input")
           return (
             <JEditor input={input} value={value} />
+          );
+        else
+          return (
+            <JTextTable input={input} value={String(value)} />
+          );
+      case "file":
+        if(type === "Input")
+          return (
+            <JFileForm input={input} value={value} />
           );
         else
           return (

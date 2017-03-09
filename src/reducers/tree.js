@@ -153,7 +153,9 @@ export function tree(state = {
                 section: 3
               },
               input: {
-                type: "editor"
+                type: "editor",
+                imageFrom: "assets/post/:permalink",
+                imageTo: "{{ site.assetsDir }}{{ page.permalink }}"
               }
             }
           ],
@@ -198,7 +200,8 @@ export function tree(state = {
                 order: 6
               },
               input: {
-                type: "text"
+                type: "file",
+                path: "assets/post/:permalink"
               }
             },
             {
@@ -309,6 +312,7 @@ export function tree(state = {
                 type: "select",
                 isRelated: true,
                 multiple: true,
+                allowAdditions: true,
                 path: "_tag",
                 options: [
                   {

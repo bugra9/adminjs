@@ -42,3 +42,7 @@ Button.item {
 .collapsing > i {
   cursor: pointer;
 }
+
+.sidebar.right {
+  background-color: white;
+}

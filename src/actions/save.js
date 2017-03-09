@@ -1,6 +1,12 @@
 import fetch from 'isomorphic-fetch';
 import jsyaml from 'js-yaml';
 
+export function addFile(file) {
+  return (dispatch, getState) => {
+    dispatch({ type: 'ADD_FILE', file });
+  };
+}
+
 export function toggle(path) {
   return (dispatch, getState) => {
     console.log("toggle", path);
@@ -82,6 +88,53 @@ export function save(path, data) {
     }
 
     dispatch({ type: 'ADD_DIFF', diff: { [path]: {type: status, obj: document} } });
+
+    // Hızlı ekleme ile gelen dosya ve dökümanları ekleyelim.
+    for(let obj of getState().save.files) {
+      let path = obj.file.path;
+      //obj.file.content = window.atob(obj.file.content);
+      dispatch({ type: 'ADD_DIFF', diff: { [path]: {type: "addFile", obj } } });
+
+      let dir = getState().tree.tree;
+      path = path.split('/');
+      let name = path.pop();
+      for(let p of path) {
+        if(!dir[p])
+          dir[p] = {};
+        dir = dir[p];
+      }
+      dir[name] = obj;
+    }
+
+    for(let i in getState().save.documents) {
+      let value = getState().save.documents[i];
+
+      let dir = getState().tree.tree;
+      let path = i;
+      path = path.split('/');
+      for(let p of path) {
+        if(!dir[p])
+          dir[p] = {};
+        dir = dir[p];
+      }
+
+      for(let v of value.data) {
+        let obj = {
+          file: {
+            path: `${i}/${v}.md`,
+            isText: true,
+            content: ""
+          },
+          content: {
+            title: v
+          }
+        };
+        dir[v+'.md'] = obj;
+
+        dispatch({ type: 'ADD_DIFF', diff: { [`${i}/${v}.md`]: {type: "add", obj } } });
+      }
+
+    }
   };
 }
 
@@ -122,24 +175,50 @@ export function commit(message) {
           break;
         case "edit":
           for(let [index, value] of raw_tree.entries())
-            if(value.path === path)
+            if(value.path === path) {
+              let content = jsyaml.dump(obj.obj.content);
+              if(obj.obj.content && Object.keys(obj.obj.content).length !== 0)
+                content = `---
+${content}---
+`;
+              else
+                content = "";
+              content += obj.obj.file.content;
+
               raw_tree[index] = {
                 path: obj.obj.file.path,
-                content: `---
-${jsyaml.dump(obj.obj.content)}---
-${obj.obj.file.content}`,
+                content,
                 mode: "100644",
                 type: "blob"
               };
+            }
 
           node[name] = obj.obj;
           break;
-        case "add":
+        case "add": {
+          let content = jsyaml.dump(obj.obj.content);
+            if(obj.obj.content && Object.keys(obj.obj.content).length !== 0)
+              content = `---
+${content}---
+`;
+            else
+              content = "";
+            content += obj.obj.file.content;
+
           raw_tree.push({
             path: obj.obj.file.path,
-            content: `---
-${jsyaml.dump(obj.obj.content)}---
-${obj.obj.file.content}`,
+            content,
+            mode: "100644",
+            type: "blob"
+          });
+
+          node[name] = obj.obj;
+          break;
+        }
+        case "addFile":
+          raw_tree.push({
+            path: obj.obj.file.path,
+            sha: obj.obj.file.sha,
             mode: "100644",
             type: "blob"
           });

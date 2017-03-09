@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Form, Checkbox } from 'semantic-ui-react';
+import { Form, Checkbox, Card, Icon, Sidebar, Menu, Button, Segment } from 'semantic-ui-react';
 import SimpleMDE from 'react-simplemde-editor';
 import 'simplemde/dist/simplemde.min.css';
 import './editor/github-markdown.css';
@@ -16,6 +16,7 @@ import 'brace/mode/yaml';
 import 'brace/theme/monokai';
 
 import { updateEditor } from '../../actions/save';
+import JFile from '../compenents/file';
 
 class JEditor extends Component {
   constructor(props) {
@@ -39,13 +40,15 @@ class JEditor extends Component {
       type = "yaml";
 
     this.state = {
+      visible: false,
+      editor: null,
       checked,
       type
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.isLoading !== this.props.isLoading || nextState.checked !== this.state.checked;
+    return nextProps.isLoading !== this.props.isLoading || nextState.checked !== this.state.checked || nextState.visible !== this.state.visible;
   }
   /*componentWillMount() {
     console.log("Editor - componentWillMount");
@@ -69,7 +72,13 @@ class JEditor extends Component {
               title: "İsim Tanımlama",
           },
         "|", "quote", "code", "unordered-list", "ordered-list", "|",
-        "link", "image",
+        "link",
+        {
+          name: "image",
+          title: "Resim Ekle",
+          className: "fa fa-picture-o",
+          action: (editor) => this.setState({ visible: !this.state.visible, editor })
+        },
         "table", "horizontal-rule", "|", "preview", "side-by-side", "fullscreen"
       ],
       lang: {
@@ -155,6 +164,15 @@ class JEditor extends Component {
       />);
     return (
       <Form.Field>
+        <JFile path={this.props.input.input.imageFrom} visible={this.state.visible} value="" onChange={(v) => {
+                let cm = this.state.editor.codemirror;
+                let startPoint = cm.getCursor("start");
+                let endPoint = cm.getCursor("end");
+                let text = cm.getSelection();
+                cm.replaceSelection(`![${text}](${this.props.input.input.imageTo}/${v})`);
+                cm.setSelection(startPoint, endPoint);
+                this.setState({ visible: !this.state.visible, editor });
+              }}  />
         <div className="right mb5">
           <Checkbox name="markdown" label="Markdown" onChange={(e, v) => this.setState({ checked: v.checked })} defaultChecked={this.state.checked} toggle />
         </div>

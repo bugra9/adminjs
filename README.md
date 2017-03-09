@@ -47,10 +47,10 @@ https://github.com/jekyll/jekyll-admin
 - [x] Belgelerin düzenlenmesi
 - [x] Giriş yapılarının tanımlanması
 - [x] Editörün yapılandırılması
-- [ ] Hızlı Ekleme (Örneğin makale eklerken sayfa değişmeden yeni etiket eklenebilmesi)
+- [x] Hızlı Ekleme (Örneğin makale eklerken sayfa değişmeden yeni etiket eklenebilmesi)
 - [x] Belgenin kaydedilmesi
 - [x] Yeni belge oluşturma
-- [ ] Dosya yükleme
+- [x] Dosya yükleme
 - [ ] Eğer bir dizin altında ayar dosyası bulunuyorsa bunun okunup yorumlanması
 - [x] İlgili kayıtların Github'a gönderilmesi (commit)
 - [ ] "Commit" kayıtlarının "Pull Request" ile gönderilmesi
