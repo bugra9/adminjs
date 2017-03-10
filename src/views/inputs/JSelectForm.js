@@ -37,11 +37,18 @@ class JSelectForm extends Component {
 
   handleChange = (e, { value }) => {
     this.setState({ value: value });
-    console.log("value", value);
+
+    if(!this.props.input.input.allowAdditions)
+      return;
+
     let temp = [];
-    for(let v of value)
-      if(this.state.defaultOptions.indexOf(v) === -1)
-        temp.push(v);
+    if(Array.isArray(value)) {
+      for(let v of value)
+        if(this.state.defaultOptions.indexOf(v) === -1)
+          temp.push(v);
+    }
+    else if(this.state.defaultOptions.indexOf(value) === -1)
+          temp.push(value);
 
     this.props.addDoc({ [this.props.input.input.path]: {attr: this.props.input.input.value, data: temp} });
   }

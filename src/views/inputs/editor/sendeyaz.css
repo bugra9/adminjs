@@ -89,6 +89,3 @@ dd {
 dd > * {  
     white-space: normal; 
 }
-.ui.modal {
-    top: 30px;
-}

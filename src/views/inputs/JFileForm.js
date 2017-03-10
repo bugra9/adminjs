@@ -16,7 +16,7 @@ class JFileForm extends Component {
     return (
       <div>
         <Form.Input label={input.title} type="text" value={value} name={input.attr} action={<Button onClick={() => this.setState({ visible: !this.state.visible })} type="button">Seç</Button>} />
-        <JFile path={input.input.path} visible={this.state.visible} value={value?value:""} onChange={(v) => this.setState({ value: v })}  />
+        <JFile path={input.input.path} visible={this.state.visible} value={value?value:""} onChange={(v) => this.setState({ value: v, visible: !this.state.visible })}  />
       </div>
     );
   }

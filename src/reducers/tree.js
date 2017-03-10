@@ -262,6 +262,7 @@ export function tree(state = {
                 type: "select",
                 isRelated: true,
                 multiple: false,
+                allowAdditions: true,
                 path: "_other/author",
                 options: [
                   {

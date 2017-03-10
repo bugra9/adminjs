@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import jsyaml from 'js-yaml';
+import slug from 'slug';
 
 export function addFile(file) {
   return (dispatch, getState) => {
@@ -119,9 +120,10 @@ export function save(path, data) {
       }
 
       for(let v of value.data) {
+        let url = slug(v)+'.md';
         let obj = {
           file: {
-            path: `${i}/${v}.md`,
+            path: `${i}/${url}`,
             isText: true,
             content: ""
           },
@@ -129,9 +131,9 @@ export function save(path, data) {
             title: v
           }
         };
-        dir[v+'.md'] = obj;
+        dir[url] = obj;
 
-        dispatch({ type: 'ADD_DIFF', diff: { [`${i}/${v}.md`]: {type: "add", obj } } });
+        dispatch({ type: 'ADD_DIFF', diff: { [`${i}/${url}`]: {type: "add", obj } } });
       }
 
     }
@@ -228,10 +230,12 @@ ${content}---
       }
     }
 
-    for(let [index, value] of raw_tree.entries())
+    for(let [index, value] of raw_tree.entries()) {
       if(value.mode === "040000")
         raw_tree.splice(index, 1);
-    console.log(raw_tree);
+      if(value.sha)
+        delete value.content;
+    }
     commitStep2(dispatch, getState, raw_tree, message);
   };
 }
