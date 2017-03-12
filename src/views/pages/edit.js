@@ -139,6 +139,10 @@ class EditDocuments extends Component {
     }
     attr[1].sort((a, b) => { return (this.props.options[a].edit.order || 99) - (this.props.options[b].edit.order || 99); });
 
+    for(let val of this.props.variables)
+      if(attr[0].indexOf(val) === -1 && attr[1].indexOf(val) === -1 && attr[2].indexOf(val) === -1 && attr[3].indexOf(val) === -1)
+        attr[1].push(val);
+
     let pos1 = [];
     for(let value of attr[1])
       pos1.push(<JInput key={value} input={this.props.options[value]} value={this.getDataAttr(value)} type="Input" />);
