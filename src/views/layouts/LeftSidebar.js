@@ -27,17 +27,13 @@ class LeftSidebar extends Component {
             <Icon name="user" />
             Yazar
           </Menu.Item>
-          <Menu.Item as={Link} to="/list/_root" name="page">
-            <Icon name="file" />
-            Sayfa
-          </Menu.Item>
           <Menu.Item as={Link} to="/list/assets" name="asset">
             <Icon name="image" />
             Dosya
           </Menu.Item>
-          <Menu.Item as={Link} to="/settings" name="setting">
-            <Icon name="setting" />
-            Ayarlar
+          <Menu.Item as={Link} to="/list/" name="page">
+            <Icon name="folder open outline" />
+            Ana Dizin
           </Menu.Item>
           <Commit />
         </Sidebar>

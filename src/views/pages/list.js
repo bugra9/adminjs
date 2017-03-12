@@ -10,6 +10,60 @@ import { toggle, remove } from '../../actions/save';
 
 
 class ListDocuments extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {status: 0};
+  }
+
+  newDir = () => {
+    let name = window.prompt("Lütfen yeni dizinin ismini giriniz.");
+    if (name != null) {
+      this.props.dir[name] = {};
+      this.props.directories.push(name);
+      this.forceUpdate();
+    }
+  }
+
+  handleFileChange = (e) => {
+    let fileInput = e.target.files[0];
+    if(!fileInput)
+      return;
+    
+    let reader = new FileReader();
+    reader.readAsDataURL(fileInput);
+    reader.onload = () => {
+      this.setState({ status: 1 });
+      let repo = window.repo.split('/');
+      let token = this.props.token;
+      let content = reader.result.split(',')[1];
+      fetch(`https://api.github.com/repos/${repo[0]}/${repo[1]}/git/blobs`
+        ,{ method: 'POST', body: JSON.stringify({encoding: "base64", content}), headers: { "Authorization": "Basic "+(new Buffer(":"+token).toString('base64'))} }
+      )
+        .then(res => res.json())
+        .then(data => {
+          let obj = {
+            file: {
+              path: `${this.props.routeParams.splat}/${fileInput.name}`,
+              sha: data.sha
+            },
+            content: {}
+          };
+          this.props.addBlob(obj);
+          this.props.files.push(obj);
+          this.props.dir[fileInput.name] = obj;
+          this.setState({ status: 0 });
+        })
+        .catch(error => {
+          this.setState({ status: 2 });
+          console.log(error.message);
+        });
+    };
+
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+  }
+
   renderTableHeader() {
     let cell = this.props.variables.map((value) => {
       let input = this.props.options[value];
@@ -69,7 +123,10 @@ class ListDocuments extends Component {
 
   renderDirectories() {
     return this.props.directories.map((value) => {
-      let link = `${this.props.location.pathname}/${value}`;
+      let path = this.props.location.pathname;
+      if(path[path.length-1] === '/')
+        path = path.substr(0, path.length-1);
+      let link = `${path}/${value}`;
       return (
         <Card centered key={value} as={Link} to={link}>
           <Card.Content className="center">
@@ -100,7 +157,7 @@ class ListDocuments extends Component {
   }
 
   render() {
-    let sections = [];
+    let sections = [{ key: "/", content: "Ana Dizin", as: Link, to: "list/" }];
     let link = "list";
     for(let value of this.props.location.pathname.substr(this.props.location.pathname.indexOf('/', 1) + 1).split('/')) {
       link += '/'+value;
@@ -136,13 +193,14 @@ class ListDocuments extends Component {
               <Breadcrumb sections={sections} />
             </Grid.Column>
             <Grid.Column textAlign="right">
-              <Button compact basic>
-                <Icon name="upload" />
-                Belge Yükle
+              <Button compact basic onClick={() => this.fileInput.click()}>
+                <input type="file" style={{display: "none"}} onChange={this.handleFileChange} ref={(input) => { this.fileInput = input; }} />
+                <Icon loading={this.state.status===1?true:false} name="upload" />
+                Dosya Yükle
               </Button>
-              <Button compact basic>
+              <Button compact basic onClick={this.newDir}>
                 <Icon name="folder" />
-                Yeni Klasör
+                Yeni Dizin
               </Button>
               <Button as={Link} to={newDocLink} compact basic>
                 <Icon name="file" />
@@ -184,13 +242,16 @@ const mapStateToProps = (state) => ({
   documents: state.documents.documents,
   files: state.documents.files,
   directories: state.documents.directories,
+  dir: state.documents.collections,
+  token: state.tree.token
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
         sidebarToggle: () => dispatch(sidebarToggle()),
         toggle: (v) => dispatch(toggle(v)),
-        remove: (v) => dispatch(remove(v))
+        remove: (v) => dispatch(remove(v)),
+        addBlob: (obj) => dispatch({ type: 'ADD_DIFF', diff: { [obj.file.path]: {type: "addFile", obj } } })
     };
 };
 
