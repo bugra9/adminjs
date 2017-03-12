@@ -51,7 +51,7 @@ https://github.com/jekyll/jekyll-admin
 - [x] Belgenin kaydedilmesi
 - [x] Yeni belge oluşturma
 - [x] Dosya yükleme
-- [ ] Eğer bir dizin altında ayar dosyası bulunuyorsa bunun okunup yorumlanması
+- [x] Eğer bir dizin altında ayar dosyası bulunuyorsa bunun okunup yorumlanması
 - [x] İlgili kayıtların Github'a gönderilmesi (commit)
 - [ ] "Commit" kayıtlarının "Pull Request" ile gönderilmesi
 

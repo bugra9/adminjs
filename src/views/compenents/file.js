@@ -26,7 +26,6 @@ class JFile extends Component {
     path = path.join('/');
 
     this.state = {visible: false, value: props.value, dir, path, status: 0};
-    console.log(this.state);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -84,7 +83,7 @@ class JFile extends Component {
 
     let dir = this.state.dir;
     let files = Object.values(dir).concat(this.props.newFiles);
-    console.log("files", files);
+
     files = files.map((val) => {
       let name = val.file.path.split('/').pop();
       let color = "blue";

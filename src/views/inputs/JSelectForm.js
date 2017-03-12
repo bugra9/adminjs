@@ -50,7 +50,8 @@ class JSelectForm extends Component {
     else if(this.state.defaultOptions.indexOf(value) === -1)
           temp.push(value);
 
-    this.props.addDoc({ [this.props.input.input.path]: {attr: this.props.input.input.value, data: temp} });
+    if(this.props.input.input.isRelated)
+      this.props.addDoc({ [this.props.input.input.path]: {attr: this.props.input.input.value, data: temp} });
   }
   handleAddition = (e, { value }) => {
     this.setState({
@@ -67,7 +68,19 @@ class JSelectForm extends Component {
       multiple = true;
 
     return (
-      <Form.Select allowAdditions={input.input.allowAdditions?true:false} onAddItem={this.handleAddition} onChange={this.handleChange} label={input.title} name={input.attr} value={this.state.value} options={this.state.options} placeholder={input.title} multiple={multiple} selection search />
+      <Form.Select
+        allowAdditions={input.input.allowAdditions?true:false}
+        onAddItem={this.handleAddition}
+        onChange={this.handleChange}
+        label={input.title}
+        name={input.attr}
+        value={this.state.value}
+        options={this.state.options}
+        placeholder={input.title}
+        multiple={multiple}
+        noResultsMessage="Sonuç bulunamadı."
+        additionLabel="Ekle: "
+        selection search />
     );
   }
 }

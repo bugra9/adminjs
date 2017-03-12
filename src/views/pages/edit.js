@@ -11,7 +11,7 @@ import { save } from '../../actions/save';
 class EditDocuments extends Component {
   constructor(props) {
     super(props);
-    this.state = {tabIndex: 1};
+    this.state = { tabIndex: 1 };
   }
 
   /*componentWillReceiveProps(nextProps) {
@@ -29,7 +29,27 @@ class EditDocuments extends Component {
         formData[i] = parseInt(formData[i]);
     }
     this.props.save(this.props.routeParams.splat, formData);
-    hashHistory.goBack();
+    let path = this.props.routeParams.splat.split('/');
+    path.pop();
+    path = path.join('/');
+    hashHistory.push('list/'+path);
+    //hashHistory.goBack();
+  }
+
+  newInputText = () => {
+    let attr = window.prompt("Lütfen yeni özelliğin ismini giriniz.");
+    if (attr != null) {
+      this.props.document.content[attr] = "";
+      this.forceUpdate();
+    }
+  }
+
+  newInputSelect = () => {
+    let attr = window.prompt("Lütfen yeni özelliğin ismini giriniz.");
+    if (attr != null) {
+      this.props.document.content[attr] = [];
+      this.forceUpdate();
+    }
   }
 
   getDataAttr(v) {
@@ -58,6 +78,7 @@ class EditDocuments extends Component {
           type: "select",
           isRelated: false,
           multiple: true,
+          allowAdditions: true,
           options: []
         }
       };
@@ -151,17 +172,13 @@ class EditDocuments extends Component {
                   <Header as="h4" dividing>Özel Alanlar</Header>
                 </Grid.Column>
                 <Grid.Column textAlign="right">
-                  <Label color="green" basic>
+                  <Label color="green" basic onClick={this.newInputText}>
                     <Icon name="add" />
                      Giriş
                   </Label>
-                  <Label color="orange" basic>
+                  <Label color="blue" basic onClick={this.newInputSelect}>
                     <Icon name="add" />
                      Dizi
-                  </Label>
-                  <Label color="blue" basic>
-                    <Icon name="add" />
-                     Nesne
                   </Label>
                 </Grid.Column>
               </Grid>

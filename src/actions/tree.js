@@ -35,7 +35,7 @@ export function login(token, nextPath) {
               type: 'FETCH_USER_SUCCESS',
               token: token
             });
-            dispatch({ type: 'SET_OPTIONS' });
+            //dispatch({ type: 'SET_OPTIONS' });
             fetchCommit(data.object, token)(dispatch);
           }
           else
@@ -122,7 +122,16 @@ function buildNewTree(tree, dispatch, token) {
     }
     node[name] = { file: tree[i], content: {} };
 
-    if(["markdown", "mkdown", "mkdn", "mkd", "md", "js", "css", "txt", "html", "htm", "json", "yaml"]
+    if(name === "_admin_attr.yml") {
+      dispatch({ type: 'SET_OPTIONS', path: node[name].file.path, options: node[name] });
+      localforage.getItem(node[name].file.sha+':c').then(value => {node[name].file.content = value});
+    }
+    else if(name === "_admin_menu.yml") {
+      dispatch({ type: 'SET_MENU', menu: node[name] });
+      localforage.getItem(node[name].file.sha+':c').then(value => {node[name].file.content = value});
+    }
+
+    if(["markdown", "mkdown", "mkdn", "mkd", "md", "js", "css", "txt", "html", "htm", "json", "yml", "yaml"]
         .indexOf(name.substring(name.lastIndexOf(".")+1)) === -1) {
       continue;
     }

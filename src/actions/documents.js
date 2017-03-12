@@ -1,4 +1,5 @@
 import localforage from 'localforage';
+import jsyaml from 'js-yaml';
 
 export function setList(path) {
   console.log("Liste oluşturuluyor...");
@@ -120,9 +121,10 @@ function extract(v) {
 function getType(v, arr) {
   let dataTemp = {};
   for(let i in arr) {
+    let data = jsyaml.load(arr[i].file.content);
     if(v.indexOf(i) !== -1)
-      for(let i2 in arr[i]) if(arr[i].hasOwnProperty(i2))
-        dataTemp[arr[i][i2].attr] = arr[i][i2];
+      for(let i2 in data) if(data.hasOwnProperty(i2))
+        dataTemp[data[i2].attr] = data[i2];
   }
   return dataTemp;
 }
