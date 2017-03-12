@@ -8,6 +8,7 @@ import JSelectForm from './JSelectForm';
 import JSelectTable from './JSelectTable';
 import JEditor from './JEditor';
 import JFileForm from './JFileForm';
+import JSlugForm from './JSlugForm';
 
 class JInput extends Component {
 
@@ -31,6 +32,15 @@ class JInput extends Component {
         if(type === "Input")
           return (
             <JTextForm type="number" input={input} value={value} />
+          );
+        else
+          return (
+            <JTextTable input={input} value={String(value)} />
+          );
+      case "slug":
+        if(type === "Input")
+          return (
+            <JSlugForm input={input} value={String(value)} />
           );
         else
           return (

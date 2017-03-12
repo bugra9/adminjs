@@ -6,7 +6,10 @@ import 'react-datetime/css/react-datetime.css';
 
 class JDateTimeForm extends Component {
   render() {
-    const {input, value} = this.props;
+    let {input, value} = this.props;
+    if(!value)
+      value = new Date();
+
     return (
       <div className="field">
         <label>{input.title}</label>

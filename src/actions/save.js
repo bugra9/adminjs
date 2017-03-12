@@ -120,7 +120,7 @@ export function save(path, data) {
       }
 
       for(let v of value.data) {
-        let url = slug(v)+'.md';
+        let url = slug(v, {lower: true})+'.md';
         let obj = {
           file: {
             path: `${i}/${url}`,

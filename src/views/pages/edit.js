@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
+import slug from 'slug';
 import { Menu, Icon, Grid, Segment, Header, Label, Form } from 'semantic-ui-react';
 
 import JInput from '../inputs';
@@ -23,15 +24,28 @@ class EditDocuments extends Component {
 
   handleSubmit = (e, { formData }) => {
     e.preventDefault();
+
+    let path = this.props.routeParams.splat.split('/');
+    path.pop();
+    path = path.join('/');
+
     delete formData[''];
     for(let i in formData) {
       if(this.props.options[i] && this.props.options[i].input.type === "number")
         formData[i] = parseInt(formData[i]);
+      if(this.props.options[i] && this.props.options[i].input.emptyValue && !formData[i]) {
+        let temp = this.props.options[i].input.emptyValue;
+        for(let i2 in formData)
+          temp = temp.replace(':'+i2, slug(formData[i2], {lower: true}));
+
+        let others = {JDate: (new Date()).toISOString().slice(0,10), JPath: path};
+        for(let i2 in others)
+          temp = temp.replace(':'+i2, slug(others[i2], {lower: true}));
+
+        formData[i] = temp;
+      }
     }
     this.props.save(this.props.routeParams.splat, formData);
-    let path = this.props.routeParams.splat.split('/');
-    path.pop();
-    path = path.join('/');
     hashHistory.push('list/'+path);
     //hashHistory.goBack();
   }
