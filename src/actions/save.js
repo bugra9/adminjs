@@ -93,6 +93,9 @@ export function save(path, data) {
     // Hızlı ekleme ile gelen dosya ve dökümanları ekleyelim.
     for(let obj of getState().save.files) {
       let path = obj.file.path;
+      for(let i in data)
+        path = path.replace(':'+i, data[i]);
+      obj.file.path = path;
       //obj.file.content = window.atob(obj.file.content);
       dispatch({ type: 'ADD_DIFF', diff: { [path]: {type: "addFile", obj } } });
 
@@ -233,8 +236,12 @@ ${content}---
     for(let [index, value] of raw_tree.entries()) {
       if(value.mode === "040000")
         raw_tree.splice(index, 1);
-      if(value.sha)
+    }
+    for(let [index, value] of raw_tree.entries()) {
+      if(value.sha) {
+        value.contentBackup = value.content;
         delete value.content;
+      }
     }
     commitStep2(dispatch, getState, raw_tree, message);
   };
@@ -287,6 +294,13 @@ function commitStep2(dispatch, getState, tree, message) {
     .catch(error => {
       console.log(error.message);
     });
+
+  for(let [index, value] of tree.entries()) {
+    if(value.contentBackup) {
+      value.content = value.contentBackup;
+      delete value.contentBackup;
+    }
+  }
 }
 
 function getNode(tree2, path, obj = false) {

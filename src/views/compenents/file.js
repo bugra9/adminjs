@@ -19,9 +19,8 @@ class JFile extends Component {
     }
     for(let i in path)
       if(path[i][0] === ':') {
-        if(!props.document.content[path[i].substr(1)])
-          props.document.content[path[i].substr(1)] = "new";
-        path[i] = props.document.content[path[i].substr(1)];
+        if(props.document.content[path[i].substr(1)])
+          path[i] = props.document.content[path[i].substr(1)];
       }
     path = path.join('/');
 
