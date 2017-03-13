@@ -38,7 +38,7 @@ class Login extends Component {
               <Segment stacked>
                 <Message hidden={ !this.props.hasErrored } negative icon="x" header={ this.props.error } size="small" />
                 <Form.Field>
-                  <Input icon="lock" iconPosition="left" name="token" placeholder="Personal Access Token" />
+                  <Input icon="lock" iconPosition="left" name="token" placeholder="Kişisel Erişim Anahtarı" />
                 </Form.Field>
                 <Button color="blue" size="large" fluid type="submit">Giriş</Button>
               </Segment>
