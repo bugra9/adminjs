@@ -6,7 +6,7 @@ export function setList(path) {
   return (dispatch, getState) => {
     dispatch({ type: 'SET_DATA_REQUEST' });
     let document = {
-      file: { path: path, isText: true, content: "" },
+      file: { path: "", isText: true, content: "" },
       content: {}
     };
     let tree = getState().tree.tree;

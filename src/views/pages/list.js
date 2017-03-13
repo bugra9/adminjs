@@ -84,6 +84,8 @@ class ListDocuments extends Component {
 
   renderTableBody() {
     let row = this.props.documents.map((value) => {
+      if(value.file.path.split('/').pop() === '_admin_attr.yml')
+        return;
       let link = '/edit/'+value.file.path;
       let cell = this.props.variables.map((variable) => {
         let input = this.props.options[variable];
@@ -174,7 +176,7 @@ class ListDocuments extends Component {
     if(mm<10) mm='0'+mm;
 
     let newDocLink = sections[sections.length-1].to.replace('list/', 'edit/');
-    newDocLink += '/'+yyyy+'-'+mm+'-'+dd+'-yeniBelge.md';
+    newDocLink += '/yeni.md';
 
 
     return (
