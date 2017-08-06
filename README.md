@@ -24,7 +24,7 @@ Verilen bağlantıdan giriş için anahtar oluşturun. Anahtar oluştururken izi
 Verilen bağlantı ile karalama yaptığımız depoyu yönetebilirsiniz.
 
 * **Kendi projende kullanma:**
-Bu depoyu çatallayın ve `docs/index.html` ile `public/index.html` dosyalarında `window.repo=".."` kısmını `window.repo="kullanıcıAdı/depo/dal"` şeklinde kendinize göre düzenleyin. Daha sonra `https://kullanıcıAdı.github.io/adminjs/` bağlantısı ile dosyalarınızı yönetmeye başlayabilirsiniz.
+Bu depoyu çatallayın ve `docs/index.html` ile `public/index.html` dosyalarında `window.repo=".."` kısmını `window.repo="kullanıcıAdı/depo/dal"` şeklinde kendinize göre düzenleyin. Depo ayarlarından "GitHub Pages" altındaki "Source" kısmını "master branch /docs folder" olarak seçin. Daha sonra `https://kullanıcıAdı.github.io/adminjs/` bağlantısı ile dosyalarınızı yönetmeye başlayabilirsiniz.
 
 ## Ekran Görüntüleri
 
